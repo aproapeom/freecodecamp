@@ -5,7 +5,7 @@ var pathtoregexp = require('path-to-regexp')
 // init project
 var express = require('express')
 var app = express()
-const regexData = '([12]d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]d|3[01]))'
+// const regexData = '([12]d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]d|3[01]))'
 const regexp = pathtoregexp('/api/timestamp/:id')
 
 function isValidDate (d) {
@@ -27,6 +27,17 @@ app.get('/', function (req, res) {
 // your first API endpoint...
 app.get('/api/hello', function (req, res) {
   res.json({ greeting: 'hello API' })
+})
+
+app.get('/api/whoami', function (req, res) {
+  // console.debug({ params: req.rawHeaders }, 'Hello there %s', 'foo')
+  res.json({
+    greeting: 'hello API',
+    request: req.rawHeaders,
+    ip: req.ip,
+    language: req.headers['language'] || 'en-us',
+    software: req.headers['user-agent'] || 'unset'
+  })
 })
 
 app.get(regexp, function (req, res) {
@@ -54,6 +65,6 @@ app.get(regexp, function (req, res) {
 })
 
 // listen for requests :)
-var listener = app.listen(process.env.PORT, function () {
+var listener = app.listen(50000, function () {
   console.log('Your app is listening on port ' + listener.address().port)
 })
